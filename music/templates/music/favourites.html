@@ -8,31 +8,71 @@
 </head>
 <body>
 
-<h1>{{ band_name }}</h1>
+<a href="/music/bands">All</a>
+<a href="/music/favourites">Favourites</a>
 
-{% for album, songs in data %}
+<h1>Favourites</h1>
 
-    <div class="band" style="float: left; border: 2px solid; padding: 20px; margin: 15px;">
+{% for band, albums in data %}
+    <div>
+        <h3>
+            {{ band }}
+        </h3>
+        {% for album, songs in albums %}
+            <div class="band" style="float: left; border: 2px solid; padding: 20px; margin: 15px;">
+                <h4>
+                    {{ album }}
+                </h4>
+                {% for song_id, song, favourite, search in songs %}
+                    <a href="https://www.youtube.com/results?search_query={{ search }}" target="_blank" style="color: #ff6b6b;">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    {% if favourite %}
+                    <a href="/music/bands/song/{{ song_id }}/favourite?url={{ request.path }}">
+                        <i class="fas fa-heart" style="color: red"></i>
+                    </a>
 
-        <h4>{{ album }}</h4>
-        {% for song, favourite, search in songs %}
-            <a href="https://www.youtube.com/results?search_query={{ search }}" target="_blank" style="color: red;">
-                <i class="fab fa-youtube"></i>
-            </a>
-            {% if favourite %}
-            <i class="fas fa-heart"></i>
-            <span style="color: green">
-            {% else %}
-            <i class="far fa-heart"></i>
-            <span style="color: black">
-            {% endif %}
-                {{ song }}
-            </span>
-            <br>
+                    <span style="color: #012600; background-color: #5dff60">
+                    {% else %}
+                    <a href="/music/bands/song/{{ song_id }}/favourite?url={{ request.path }}">
+                        <i class="far fa-heart"></i>
+                    </a>
+                    <span style="color: black">
+                    {% endif %}
+                        {{ song }}
+                    </span>
+                    <br>
+                {% endfor %}
+            </div>
         {% endfor %}
+        <div style="clear: both"></div>
     </div>
-
 {% endfor %}
+
+{##}
+{#{% for album, songs in data %}#}
+{##}
+{#    <div class="band" style="float: left; border: 2px solid; padding: 20px; margin: 15px;">#}
+{##}
+{#        <h4>{{ album }}</h4>#}
+{#        {% for song, favourite, search in songs %}#}
+{#            <a href="https://www.youtube.com/results?search_query={{ search }}" target="_blank" style="color: red;">#}
+{#                <i class="fab fa-youtube"></i>#}
+{#            </a>#}
+{#            {% if favourite %}#}
+{#            <i class="fas fa-heart"></i>#}
+{#            <span style="color: green">#}
+{#            {% else %}#}
+{#            <i class="far fa-heart"></i>#}
+{#            <span style="color: black">#}
+{#            {% endif %}#}
+{#                {{ song }}#}
+{#            </span>#}
+{#            <br>#}
+{#        {% endfor %}#}
+{#    </div>#}
+{##}
+{#{% endfor %}#}
 
 </body>
 </html>

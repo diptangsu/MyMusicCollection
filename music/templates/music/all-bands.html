@@ -1,10 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>All Bands</title>
 </head>
 <body>
-$END$
+
+<a href="/music/bands">All</a>
+<a href="/music/favourites">Favourites</a>
+
+<h1>All Bands</h1>
+
+{% for alphabet, bands in data %}
+
+    <div class="band" style="float: left; border: 2px solid; padding: 20px; margin: 15px;">
+        <h4>
+            {{ alphabet }}
+        </h4>
+        {% for band in bands %}
+            <a href="{% url 'band' band.id %}">
+                {{ band.name }}
+            </a>
+            <br>
+        {% endfor %}
+    </div>
+
+{% endfor %}
+
 </body>
 </html>

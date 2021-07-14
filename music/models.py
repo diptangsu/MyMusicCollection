@@ -2,10 +2,13 @@ from django.db import models
 
 
 class Band(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.name
+
+    def get_albums(self):
+        return Album.objects.filter(band=self)
 
 
 class Album(models.Model):
@@ -13,25 +16,31 @@ class Album(models.Model):
     band = models.ForeignKey(Band, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.name
+        return f'{self.name} [{self.band.name}]'
+
+    def get_songs(self):
+        return Song.objects.filter(album=self)
+
+    def get_favourites(self):
+        return Song.objects.filter(album=self, favourite=True)
 
 
 class Song(models.Model):
     name = models.CharField(max_length=255)
     album = models.ForeignKey(Album, on_delete=models.CASCADE, null=True)
-    favourite = models.BooleanField()
+    favourite = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.name} [{self.album.band.name} ({self.album.name})'
+        return f'{self.name} [{self.album.band.name} ({self.album.name})]'
 
 
 class Playlist(models.Model):
     name = models.CharField(max_length=255)
 
     def __str__(self):
-        return f'{self.name} ({self.get_all_songs().count()} songs)'
+        return f'{self.name} ({self.get_songs().count()} songs)'
 
-    def get_all_songs(self):
+    def get_songs(self):
         return PlaylistSongs.objects.filter(playlist=self)
 
 
