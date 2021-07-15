@@ -7,55 +7,41 @@
 
 {% block body %}
 
-    <style>
-        table.scrolldown tbody {
-            height: 200px;
-        }
-    </style>
+    {% for band, songs in data %}
 
-    {% for band, albums in data %}
-        <div>
-            <h3>
-                {{ band }}
-            </h3>
-            {% for album, songs in albums %}
+        <table class="scrolldown">
+            <thead>
+            <tr>
+                <th align="left">{{ band }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for song_id, song, favourite, search in songs %}
+                <tr>
+                    <td>
+                        <a href="https://www.youtube.com/results?search_query={{ search }}" target="_blank"
+                           style="color: #ff6b6b;">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        {% if favourite %}
+                        <a href="/music/bands/song/{{ song_id }}/favourite?url={{ request.path }}">
+                            <i class="fas fa-heart" style="color: red"></i>
+                        </a>
 
-                <table class="scrolldown">
-                    <thead>
-                    <tr>
-                        <th align="left">{{ album }}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for song_id, song, favourite, search in songs %}
-                        <tr>
-                            <td>
-                                <a href="https://www.youtube.com/results?search_query={{ search }}" target="_blank"
-                                   style="color: #ff6b6b;">
-                                    <i class="fab fa-youtube"></i>
-                                </a>
-                                {% if favourite %}
-                                <a href="/music/bands/song/{{ song_id }}/favourite?url={{ request.path }}">
-                                    <i class="fas fa-heart" style="color: red"></i>
-                                </a>
-
-                                <span style="color: #052900; background-color: #a5ffa5;">
-                                {% else %}
-                                <a href="/music/bands/song/{{ song_id }}/favourite?url={{ request.path }}">
-                                    <i class="far fa-heart"></i>
-                                </a>
-                                <span>
-                                {% endif %}
-                                {{ song }}
-                                </span>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                        <span style="color: #052900; background-color: #a5ffa5;">
+                        {% else %}
+                        <a href="/music/bands/song/{{ song_id }}/favourite?url={{ request.path }}">
+                            <i class="far fa-heart"></i>
+                        </a>
+                        <span>
+                        {% endif %}
+                        {{ song }}
+                        </span>
+                    </td>
+                </tr>
             {% endfor %}
-            <div style="clear: both"></div>
-        </div>
+            </tbody>
+        </table>
     {% endfor %}
 
 {% endblock %}
