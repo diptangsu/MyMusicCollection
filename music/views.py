@@ -1,10 +1,9 @@
+import json
 from collections import defaultdict
 
-from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
-
-import json
 
 from .models import Band, Album, Song
 
@@ -42,15 +41,28 @@ def favourites(request):
 def bands(request):
     if request.method == 'GET':
         alphabetical = defaultdict(list)
-        for band in Band.objects.all():
+        all_bands = Band.objects.all()
+        for band in all_bands:
             alphabetical[band.name[0]].append(band)
 
-        return render(request, 'music/all-bands.html', {'data': alphabetical.items()})
+        total_bands = all_bands.count()
+        total_albums = Album.objects.all().count()
+        total_songs = Song.objects.all().count()
+
+        return render(request, 'music/all-bands.html', {
+            'data': alphabetical.items(),
+            'total_bands': total_bands,
+            'total_albums': total_albums,
+            'total_songs': total_songs,
+        })
 
     elif request.method == 'POST':
         band_name = request.POST['band']
-        band = Band(name=band_name)
-        band.save()
+        try:
+            band = Band(name=band_name)
+            band.save()
+        except:
+            band = Band.objects.get(name=band_name)
 
         return JsonResponse({'band_id': band.id})
 
@@ -59,7 +71,8 @@ def get_band(request, band_id):
     band = Band.objects.get(id=band_id)
 
     data = {}
-    for album in band.get_albums():
+    albums = band.get_albums()
+    for album in albums:
         data[album.name] = [
             (
                 song.id,
@@ -70,7 +83,15 @@ def get_band(request, band_id):
             for song in album.get_songs()
         ]
 
-    return render(request, 'music/albums.html', {'data': data.items(), 'band_name': band.name})
+    total_albums = albums.count()
+    total_songs = sum(len(songs) for _, songs in data.items())
+
+    return render(request, 'music/albums.html', {
+        'data': data.items(),
+        'band_name': band.name,
+        'total_albums': total_albums,
+        'total_songs': total_songs,
+    })
 
 
 @csrf_exempt

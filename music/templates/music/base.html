@@ -1,0 +1,99 @@
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+
+        {% endblock %}
+    </title>
+
+    <script src="https://kit.fontawesome.com/32ed1706f4.js" crossorigin="anonymous"></script>
+
+    <style>
+        table {
+            float: left;
+            margin: 5px;
+            border: 2px solid whitesmoke;
+        }
+
+        table, th, td {
+            padding: 10px;
+        }
+
+        th {
+            color: #79fcd7;
+        }
+
+        a {
+            color: antiquewhite;
+            text-decoration: none;
+        }
+
+        a:visited {
+            color: #adbfff;
+        }
+
+        span {
+            padding: 5px;
+        }
+
+        /* To display the block as level element */
+        table.scrolldown tbody, table.scrolldown thead {
+            display: block;
+        }
+
+        table.scrolldown tbody {
+            height: 500px;
+            overflow-x: hidden;
+        }
+
+        /* width */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #555;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f1f1f1;
+        }
+    </style>
+
+</head>
+<body style="background-color: #3e3e3e; color: whitesmoke">
+
+<a href="/music/bands">All</a> |
+<a href="/music/favourites">Favourites</a>
+<br>
+(
+{% if total_bands %}
+    {{ total_bands | intcomma }} bands,
+{% endif %}
+{% if total_albums %}
+    {{ total_albums | intcomma }} albums,
+{% endif %}
+{% if total_songs %}
+    {{ total_songs | intcomma }} songs
+{% endif %}
+)
+
+<br>
+
+{% block body %}
+
+{% endblock %}
+
+</body>
+</html>

@@ -5,7 +5,7 @@ class Band(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
-        return self.name
+        return f'{self.name} ({len(self.get_albums())})'
 
     def get_albums(self):
         return Album.objects.filter(band=self)
@@ -19,7 +19,7 @@ class Album(models.Model):
         return f'{self.name} [{self.band.name}]'
 
     def get_songs(self):
-        return Song.objects.filter(album=self)
+        return Song.objects.filter(album=self).order_by('-favourite')
 
     def get_favourites(self):
         return Song.objects.filter(album=self, favourite=True)

@@ -1,31 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>All Bands</title>
-</head>
-<body>
+{% extends 'music/base.html' %}
 
-<a href="/music/bands">All</a>
-<a href="/music/favourites">Favourites</a>
 
-<h1>All Bands</h1>
+{% block title %}
+    All Bands
+{% endblock %}
 
-{% for alphabet, bands in data %}
 
-    <div class="band" style="float: left; border: 2px solid; padding: 20px; margin: 15px;">
-        <h4>
-            {{ alphabet }}
-        </h4>
-        {% for band in bands %}
-            <a href="{% url 'band' band.id %}">
-                {{ band.name }}
-            </a>
-            <br>
-        {% endfor %}
-    </div>
+{% block body %}
 
-{% endfor %}
+    <h1>All Bands</h1>
 
-</body>
-</html>
+    {% for alphabet, bands in data %}
+
+        <table class="scrolldown">
+            <thead>
+            <tr>
+                <th align="left">{{ alphabet }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for band in bands %}
+                <tr>
+                    <td>
+                        <a href="{% url 'band' band.id %}">
+                            {{ band }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    {% endfor %}
+
+{% endblock %}
