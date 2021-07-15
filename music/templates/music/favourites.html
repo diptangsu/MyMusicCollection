@@ -28,13 +28,12 @@
                             <i class="fas fa-heart" style="color: red"></i>
                         </a>
 
-                        <span style="color: #052900; background-color: #a5ffa5;">
                         {% else %}
                         <a href="/music/bands/song/{{ song_id }}/favourite?url={{ request.path }}">
                             <i class="far fa-heart"></i>
                         </a>
-                        <span>
                         {% endif %}
+                        <span>
                         {{ song }}
                         </span>
                     </td>
