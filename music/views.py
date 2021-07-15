@@ -9,30 +9,22 @@ from .models import Band, Album, Song
 
 
 def favourites(request):
-    data = {
-        band.name: {
-            album.name: [
-                (
-                    song.id,
-                    song.name,
-                    song.favourite,
-                    '+'.join(band.name.split() + song.name.split())
-                )
-                for song in album.get_favourites()
-            ]
-            for album in band.get_albums()
-        }
-        for band in Band.objects.all()
-    }
+    fav_music = defaultdict(dict)
+    fav_songs = Song.objects.filter(favourite=True)
+    for song in fav_songs:
+        band_name = song.album.band.name
+        album_name = song.album.name
+        fav_music[band_name].setdefault(album_name, [])
+        fav_music[band_name][album_name].append((
+            song.id,
+            song.name,
+            song.favourite,
+            '+'.join(band_name.split() + song.name.split())
+        ))
 
     favourite_music = {}
-    for band_name, albums in data.items():
-        favourite_albums = defaultdict(list)
-        for album, songs in albums.items():
-            if songs:
-                favourite_albums[album].extend(songs)
-        if favourite_albums:
-            favourite_music[band_name] = favourite_albums.items()
+    for band, albums in fav_music.items():
+        favourite_music[band] = albums.items()
 
     return render(request, 'music/favourites.html', {'data': favourite_music.items()})
 
