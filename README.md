@@ -7,3 +7,7 @@ I don't want all that taking up space in my new laptop, and I don't want to forg
 so much in there that I don't get time to listen to anymore and so much that I've actually forgotten about.
 
 Hence, I've decided to store just the names of the songs from my collection into this website.
+
+## TODO
+
+- [ ] Add a download button that downloads 1 or more songs (youtube-dl)
