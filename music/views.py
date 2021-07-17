@@ -8,6 +8,10 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Band, Album, Song
 
 
+def index(request):
+    return redirect('bands')
+
+
 def favourites(request):
     favourite_music = defaultdict(list)
     fav_songs = Song.objects.filter(favourite=True)
